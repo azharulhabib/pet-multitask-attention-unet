@@ -1,0 +1,23 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.env
+
+# Large Datasets
+data/*
+!data/.gitkeep
+
+# Trained Model Artifacts & Weights (Binary files)
+models/*.keras
+models/*.h5
+!models/.gitkeep
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints*/
