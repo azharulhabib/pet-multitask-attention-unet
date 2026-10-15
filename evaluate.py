@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import precision_recall_fscore_support
@@ -46,19 +47,19 @@ def print_results(model_name, split_name, metrics):
 
 def main():
     print("Loading Data Splits...")
-    # NOTE: If your dataset.py returns a 3rd test split, just add it here!
-    train_ds, val_ds, _ = get_dataloaders('data/images/', 'data/annotations/trimaps/', batch_size=16)
+    train_ds, val_ds, _ = get_dataloaders('data/images/', 'data/annotations/trimaps/', batch_size=32)
 
-    print("Loading Attention U-Net Model...")
-    att_model = tf.keras.models.load_model('models/attention_unet_best_model.keras')
+    if os.path.exists('models/unet_best_model.keras'):
+        print("Loading Baseline U-Net Model...")
+        unet_model = tf.keras.models.load_model('models/unet_best_model.keras')
+        val_metrics_unet = evaluate_split(unet_model, val_ds, "Validation")
+        print_results("Baseline U-Net", "Validation", val_metrics_unet)
 
-    # Evaluate Training Data
-    train_metrics = evaluate_split(att_model, train_ds, "Training")
-    print_results("Attention U-Net", "Training", train_metrics)
-
-    # Evaluate Validation Data
-    val_metrics = evaluate_split(att_model, val_ds, "Validation")
-    print_results("Attention U-Net", "Validation", val_metrics)
+    if os.path.exists('models/attention_unet_best_model.keras'):
+        print("Loading Attention U-Net Model...")
+        att_model = tf.keras.models.load_model('models/attention_unet_best_model.keras')
+        val_metrics_att = evaluate_split(att_model, val_ds, "Validation")
+        print_results("Attention U-Net", "Validation", val_metrics_att)
 
 if __name__ == "__main__":
     main()
